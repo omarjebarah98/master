@@ -6,3 +6,4 @@
   b. add new deals
 3- add validation on from/to iso (NonNUll, regex : accept only 3 letters)
 4- create junit test for both api's
+5- used MySql DB
