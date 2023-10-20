@@ -25,6 +25,8 @@ public class ServiceTest {
     @InjectMocks
     private WareHouseServiceImpl dealsService;
 
+    //    test for get all the deals
+
     @Test
     public void testGetAllDeals() {
         Deals deal1 = Deals.builder().dealId(1L).build();
@@ -41,6 +43,7 @@ public class ServiceTest {
         assertEquals(2, result.size());
     }
 
+    //    Test for failed add existing deal
     @Test
     public void addDealFailed() {
         DealDTO newDeal = DealDTO.builder().toIso("JOD").fromIso("USD")
@@ -60,6 +63,8 @@ public class ServiceTest {
         assertEquals("this deal already exist", result);
     }
 
+    //    Test for success add deal
+
     @Test
     public void addDealSuccess() {
         DealDTO newDeal = DealDTO.builder().toIso("ADS").fromIso("TUF")
@@ -77,5 +82,26 @@ public class ServiceTest {
         when(wareHouseRepository.findAll()).thenReturn(deals);
         String result = dealsService.addNewDeal(newDeal);
         assertEquals("new deal added successfully", result);
+    }
+
+    //    Test for failed add deal with empty or null from/to iso
+
+    @Test
+    public void addDealFromIsoIsNull() {
+        DealDTO newDeal = DealDTO.builder().toIso(null).fromIso("")
+                .amount(5).build();
+
+        Deals deal1 = Deals.builder().dealId(1L).toIso("JOD").fromIso("USD")
+                .amount(5).build();
+        Deals deal2 = Deals.builder().dealId(2L).toIso("AFN").fromIso("USD")
+                .amount(5).build();
+
+        List<Deals> deals = new ArrayList<>();
+        deals.add(deal1);
+        deals.add(deal2);
+
+        when(wareHouseRepository.findAll()).thenReturn(deals);
+        String result = dealsService.addNewDeal(newDeal);
+        assertEquals("from/to iso can't be null or empty", result);
     }
 }

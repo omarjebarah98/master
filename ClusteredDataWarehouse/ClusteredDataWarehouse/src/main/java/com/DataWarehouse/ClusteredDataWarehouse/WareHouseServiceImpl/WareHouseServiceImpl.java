@@ -39,6 +39,11 @@ public class WareHouseServiceImpl implements WareHouseService {
             return "this deal already exist";
         }
 
+        if(Objects.isNull(newDeal.getFromIso()) || newDeal.getFromIso().isBlank()
+                || Objects.isNull(newDeal.getToIso()) || newDeal.getToIso().isBlank()) {
+            return "from/to iso can't be null or empty";
+        }
+
         log.info("the new deal is not exist on DB");
         Deals deal = Deals.builder().fromIso(newDeal.getFromIso()).toIso(newDeal.getToIso())
                 .dealDate(LocalDateTime.now()).amount(newDeal.getAmount()).build();
